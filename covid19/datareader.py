@@ -12,6 +12,7 @@ dtype = {
 
 columns = [
     'Country/Region',
+    'Province/State',
     'Last Update',
     'Confirmed',
     'Deaths',
@@ -20,9 +21,15 @@ columns = [
 
 
 def read_csv(csv):
-    return pd.read_csv(csv, dtype=dtype, parse_dates=['Last Update'], usecols=columns, na_values="").fillna(0)
+    return pd.read_csv(csv, dtype=dtype, usecols=columns, na_values="").fillna(0)
+
+
+def file_list(path: str):
+    return [read_csv(f) for f in g.glob(path)]
 
 
 def read_files():
-    csvs = [read_csv(f) for f in g.glob('daily_reports/*.csv')]
-    return pd.concat(csvs, ignore_index=True)
+    return pd.concat(
+        file_list('daily_reports/*.csv'),
+        ignore_index=True
+    )
