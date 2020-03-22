@@ -1,4 +1,5 @@
-import csv
+import pandas
+import numpy
 
 from entity import Session, engine, Base
 from gapminder import GapMinder
@@ -15,13 +16,18 @@ def get_row_by(id):
 def get_all():
   return get_query().all()
 
-def add_row(country, continent, year, life_expectancy, population, gdp_per_capita):
+def add_row(country: str, continent: str, year: int, life_expectancy: float, population: int, gdp_per_capita: float):
   session.add(GapMinder(country, continent, year, life_expectancy, population, gdp_per_capita))
   session.commit()
 
-with open('gapminder.csv') as datafile:
-  reader = csv.DictReader(datafile)
-  for row in reader:
-    add_row(row['country'], row['continent'], row['year'], row['lifeExp'], row['pop'], row['gdpPercap'])
+gapminder = pandas.read_csv('gapminder.csv', dtype = {
+  'year': numpy.int64,
+  'life_expectancy': numpy.float64,
+  'population': numpy.int64,
+  'gdp_per_capita': numpy.float64
+})
 
-print(get_all())
+for index, row in gapminder.iterrows():
+  add_row(row['country'], row['continent'], row['year'], row['lifeExp'], row['pop'], row['gdpPercap'])
+
+# print(gapminder)

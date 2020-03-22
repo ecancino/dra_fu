@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Boolean, Integer
+from sqlalchemy import Column, String, Float, Integer
 from entity import Entity, Base
 
 class GapMinder(Entity, Base):
@@ -7,11 +7,11 @@ class GapMinder(Entity, Base):
   country = Column(String)
   continent = Column(String)
   year = Column(Integer)
-  life_expectancy = Column(Integer)
+  life_expectancy = Column(Float)
   population = Column(Integer)
-  gdp_per_capita = Column(Integer)
+  gdp_per_capita = Column(Float)
 
-  def __init__(self, country, continent, year, life_expectancy, population, gdp_per_capita):
+  def __init__(self, country: str, continent: str, year: int, life_expectancy: float, population: int, gdp_per_capita: float):
     Entity.__init__(self)
     self.country = country
     self.continent = continent
